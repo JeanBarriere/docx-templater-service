@@ -1,23 +1,26 @@
-const express = require('express')
-const helmet = require('helmet')
-const cors = require('cors')
-const multer = require('multer')
+const functions = require('firebase-functions')
 const { generateDoc } = require('./docx')
-const upload = multer()
+const { getData } = require('./getData')
 
-const app = express()
+exports.generateDoc = functions.https.onRequest(async (req, res) => {
+  if (req.method !== 'POST') {
+    // Return a "method not allowed" error
+    return res.status(405).end();
+  }
 
-app.use(helmet())
-app.use(cors())
+  const { files, body } = await getData(req)
 
-app.post('/', upload.single('doc'), function (req, res) {
-  const file = req.file
-  if (!file || file.mimetype !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-    res.status(422).send('invalid file or file not found')
-  } else if (!('data' in req.body)) {
+  if (!files.doc) {
+    res.status(422).send('file not found')
+  }
+
+  const file = files.doc
+  if (file.mimetype !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    res.status(422).send('invalid file')
+  } else if (!('data' in body)) {
     res.status(422).send('no template sent')
   }
-  const { data: strData } = req.body
+  const { data: strData } = body
   let data
   try {
     data = JSON.parse(strData)
@@ -27,8 +30,4 @@ app.post('/', upload.single('doc'), function (req, res) {
 
   const doc = generateDoc(file.buffer, data)
   res.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document').send(doc)
-})
-
-app.listen(3000, () => {
-  console.log(' server ready on port 3000')
 })

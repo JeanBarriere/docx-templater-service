@@ -1,33 +1,26 @@
 {
-  "name": "docx-node-service",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Jean Barriere <jean@barriere.io>",
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
   "scripts": {
-    "start": "node index.js",
-    "netlify": "netlify-lambda serve .netlify/functions",
-    "postinstall": "netlify-lambda install",
-    "netlify:build": "netlify-lambda build .netlify/functions"
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
   },
-  "proxy": {
-    "/.netlify/functions": {
-      "target": "http://localhost:3000",
-      "pathRewrite": {
-        "^/\\.netlify/functions": ""
-      }
-    }
+  "engines": {
+    "node": "12"
   },
-  "license": "MIT",
+  "main": "index.js",
   "dependencies": {
-    "cors": "^2.8.5",
+    "busboy": "^0.3.1",
     "docxtemplater": "^3.19.7",
-    "express": "^4.17.1",
-    "firebase-admin": "^9.4.1",
+    "firebase-admin": "^9.2.0",
     "firebase-functions": "^3.11.0",
-    "helmet": "^4.2.0",
-    "lambda-multipart-parser": "^0.0.2",
-    "multer": "^1.4.2",
-    "netlify-lambda": "^2.0.1",
     "pizzip": "^3.0.6"
-  }
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
 }

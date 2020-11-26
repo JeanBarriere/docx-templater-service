@@ -8,7 +8,6 @@ async function getData (req) {
     const files = {}
 
     busboy.on('field', (fieldname, val) => {
-      console.log(`Processed field ${fieldname}: ${val}.`)
       body[fieldname] = val
     })
 
@@ -16,8 +15,6 @@ async function getData (req) {
 
 
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
-      console.log(`Processed file ${filename}`)
-
       const promise = new Promise((res, rej) => {
         const fileBuffer = [];
         file.on('data', function (d) { fileBuffer.push(d) })
