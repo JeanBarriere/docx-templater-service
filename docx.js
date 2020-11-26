@@ -57,7 +57,7 @@ function generateDoc(content, data) {
 
   // get buffer from doc
   // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-  const buffer = doc.getZip().generate({type: 'nodebuffer'})
+  const buffer = doc.getZip().generate({ type: 'nodebuffer' })
   // fs.writeFileSync(path.resolve(__dirname, 'output.docx'), buf);
 
   return buffer
